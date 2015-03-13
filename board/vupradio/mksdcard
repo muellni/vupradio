@@ -151,6 +151,7 @@ umount .mnt
 section "Populating rootfs partition..."
 
 mount "${SDCARD}p2" .mnt || exit 2
+rm -rf .mnt/*
 ${TAR} -xpsf ${OUTPUT_PREFIX}images/rootfs.tar -C .mnt
 umount .mnt
 

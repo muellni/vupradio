@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# init devices
+#
+
+case "$1" in
+  start)
+ 	echo "Loading network driver..."
+	modprobe smsc95xx
+ 	echo "Loading sound driver..."
+	modprobe snd-bcm2835
+ 	#Set output to analog
+	amixer cset numid=3 1
+	;;
+  stop)
+	echo -n "Unloading sound driver..."
+	modprobe -r snd-bcm2835
+	echo -n "Unloading network driver..."
+	modprobe -r smsc95xx
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+
