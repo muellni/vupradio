@@ -39,7 +39,7 @@ section() {
 # environment overrides
 
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-OUTPUT_PREFIX=""
+OUTPUT_PREFIX="/home/sws/scratch/vupradio_buildroot_output"
 
 # check parameters
 
@@ -81,9 +81,9 @@ fi
 
 # sanity check
 
-if [ ! -d "images/rpi-firmware" ] || [ ! -f "images/rootfs.tar" ]; then
+if [ ! -d "$OUTPUT_PREFIX/images/rpi-firmware" ] || [ ! -f "$OUTPUT_PREFIX/images/rootfs.tar" ]; then
 	if [ -d "output/images/rpi-firmware" ] && [ -f "output/images/rootfs.tar" ]; then
-		OUTPUT_PREFIX="output/"
+		OUTPUT_PREFIX="output"
 	else
 		echo "Didn't find boot and/or rootfs.tar! ABORT."
 		exit 1
@@ -140,10 +140,10 @@ section "Populating boot partition..."
 
 mount "${SDCARD}p1" .mnt || exit 2
 rm -rf .mnt/*
-cp -r ${OUTPUT_PREFIX}images/rpi-firmware/* .mnt
+cp -r ${OUTPUT_PREFIX}/images/rpi-firmware/* .mnt
 rm .mnt/bcm2708-rpi-b-plus.dtb
 rm .mnt/bcm2709-rpi-2-b.dtb
-${OUTPUT_PREFIX}host/usr/bin/mkknlimg ${OUTPUT_PREFIX}images/zImage .mnt/zImage
+${OUTPUT_PREFIX}/host/usr/bin/mkknlimg ${OUTPUT_PREFIX}/images/zImage .mnt/zImage
 umount .mnt
 
 # fill rootfs
@@ -152,12 +152,14 @@ section "Populating rootfs partition..."
 
 mount "${SDCARD}p2" .mnt || exit 2
 rm -rf .mnt/*
-${TAR} -xpsf ${OUTPUT_PREFIX}images/rootfs.tar -C .mnt
+${TAR} -xpsf ${OUTPUT_PREFIX}/images/rootfs.tar -C .mnt
 umount .mnt
 
 # clean up
 
 rmdir .mnt
+
+sync
 
 section "Finished!"
 

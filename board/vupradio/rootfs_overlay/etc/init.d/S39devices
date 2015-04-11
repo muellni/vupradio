@@ -7,14 +7,20 @@ case "$1" in
   start)
  	echo "Loading network driver..."
 	modprobe smsc95xx
+ 	echo "Loading wifi driver..."
+	modprobe 8192cu
  	echo "Loading sound driver..."
 	modprobe snd-bcm2835
  	#Set output to analog
 	amixer cset numid=3 1
+ 	#Resets the volume to last value
+  alsactl init
 	;;
   stop)
 	echo -n "Unloading sound driver..."
 	modprobe -r snd-bcm2835
+	echo -n "Unloading wifi driver..."
+	modprobe -r 8192cu
 	echo -n "Unloading network driver..."
 	modprobe -r smsc95xx
 	;;
