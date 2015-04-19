@@ -13,8 +13,8 @@ case "$1" in
 	modprobe snd-bcm2835
  	#Set output to analog
 	amixer cset numid=3 1
- 	#Resets the volume to last value
-  alsactl init
+	#Resets the volume to last value
+	alsactl init
 	;;
   stop)
 	echo -n "Unloading sound driver..."
